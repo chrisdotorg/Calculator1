@@ -1,0 +1,17 @@
+# Utiliser une image contenant Maven et JDK
+FROM maven:3.6.3-openjdk-17
+
+# Définir le répertoire de travail
+WORKDIR /app
+
+# Copier les fichiers du projet
+COPY pom.xml ./
+RUN mvn dependency:go-offline
+
+COPY src ./src
+
+# Compiler et empaqueter l’application
+RUN mvn clean package -DskipTests
+
+# Exécuter l'application
+CMD ["java", "-jar", "target/app.jar"]
